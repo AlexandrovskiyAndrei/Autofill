@@ -3,31 +3,40 @@ var SEARCH_FIELD = "searchTitle";
 
 var posts = [];
 var currentActive = -1;
-var highlightedTitle = "";
 var movingDown = false;
 var totalSuggestions = 0;
 
 function showSuggestions() {
-	document.getElementById("resp").innerText = '';
+	document.getElementById("suggestions").innerText = '';
+	clearSuggestionListeners();
 	var userInput = document.getElementById(SEARCH_FIELD).value;
 	if (userInput != "") {
-		var titles = getTitles(findMatchingPostsByTitle(userInput));
-		totalSuggestions = titles.length;
-		for (var i=0; i<totalSuggestions; i++){
-			var div = document.createElement('DIV');
-			div.id = i;
-			div.classList.add("sug");
-			div.classList.add("well");
-			div.addEventListener('mouseover', highlight);
-			div.addEventListener('mouseout', highlight);
-			div.addEventListener('click', processSelected);
-			div.addEventListener('keydown', keyboardListener);
-			var text = document.createTextNode(titles[i]);
-			div.appendChild(text);
-			document.getElementById("resp").appendChild(div);
-		}
+		configureSuggestions(userInput);
 	}
 	document.getElementById(SEARCH_FIELD).addEventListener('keydown', keyboardListener);
+}
+
+function configureSuggestions(input){
+	var titles = getTitles(findMatchingPostsByTitle(input));
+	totalSuggestions = titles.length;
+	for (var i=0; i<totalSuggestions; i++){
+		var div = document.createElement('DIV');
+		div.id = i;
+		div.classList.add("suggestion");
+		div.addEventListener('click', processSelected);
+		div.addEventListener('keydown', keyboardListener);
+		var text = document.createTextNode(titles[i]);
+		div.appendChild(text);
+		document.getElementById("suggestions").appendChild(div);
+	}
+}
+
+function clearSuggestionListeners(){
+	var suggested = document.getElementsByClassName("suggestion");
+	for (var i=0; i<suggested.length; i++){
+		suggested[i].removeEventListener('click', processSelected);
+		suggested[i].removeEventListener('keydown', keyboardListener);
+	}
 }
 
 function highlight(event){
@@ -54,24 +63,35 @@ function keyboardListener(event){
 	}
 // key DOWN is pressed
 	if (event.keyCode == 40) { 
-		currentActive++;
-		if (currentActive > (totalSuggestions - 1)) {
-			currentActive = 0;
-			document.getElementById((totalSuggestions - 1)).classList.remove("active");
-		}
-		if (currentActive>0) {document.getElementById(currentActive-1).classList.remove("active");}
-		document.getElementById(currentActive).classList.add("active");
-// key UP is pressed
-	} else if (event.keyCode == 38) {
-		currentActive--;
-		if (currentActive < 0) {
-			currentActive = totalSuggestions-1
-			document.getElementById("0").classList.remove("active");
-		};
-		document.getElementById(currentActive).classList.add("active");
-		if (currentActive != (totalSuggestions-1)) 
-			document.getElementById(currentActive+1).classList.remove("active");
+		handleKeyDownPress();
 	}
+// key UP is pressed
+	else if (event.keyCode == 38) {
+		handleKeyUpPress();
+	}
+}
+
+function handleKeyDownPress(){
+	currentActive++;
+	if (currentActive > (totalSuggestions - 1)) {
+		currentActive = 0;
+		document.getElementById((totalSuggestions - 1)).classList.remove("active");
+	}
+	if (currentActive>0) {
+		document.getElementById(currentActive-1).classList.remove("active");
+	}
+	document.getElementById(currentActive).classList.add("active");
+}
+
+function handleKeyUpPress(){
+	currentActive--;
+	if (currentActive < 0) {
+		currentActive = totalSuggestions-1
+		document.getElementById("0").classList.remove("active");
+	};
+	document.getElementById(currentActive).classList.add("active");
+	if (currentActive != (totalSuggestions-1)) 
+		document.getElementById(currentActive+1).classList.remove("active");	
 }
 
 function processSelected(event){
@@ -82,7 +102,7 @@ function processSelected(event){
 		document.getElementById(SEARCH_FIELD).value = highlightedTitle;
 		showPostDetails(highlightedTitle);
 	}
-	document.getElementById("resp").innerText = '';
+	document.getElementById("suggestions").innerText = '';
 	currentActive = -1;
 	highlightedTitle = "";
 	totalSuggestions = 0;
