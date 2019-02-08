@@ -3,40 +3,39 @@ var SEARCH_FIELD = "searchTitle";
 
 var posts = [];
 var currentActive = -1;
-var movingDown = false;
 var totalSuggestions = 0;
 
 function showSuggestions() {
+	var search = document.getElementById(SEARCH_FIELD);
 	document.getElementById("suggestions").innerText = '';
 	clearSuggestionListeners();
-	var userInput = document.getElementById(SEARCH_FIELD).value;
+	var userInput = search.value;
 	if (userInput != "") {
 		configureSuggestions(userInput);
 	}
-	document.getElementById(SEARCH_FIELD).addEventListener('keydown', keyboardListener);
+	search.addEventListener('keydown', keyboardListener);
 }
 
 function configureSuggestions(input){
+	var suggestions = document.getElementById("suggestions");
 	var titles = getTitles(findMatchingPostsByTitle(input));
 	totalSuggestions = titles.length;
+	suggestions.addEventListener('click', processSelected, true);
+	suggestions.addEventListener('keydown', keyboardListener, true);
 	for (var i=0; i<totalSuggestions; i++){
 		var div = document.createElement('DIV');
 		div.id = i;
 		div.classList.add("suggestion");
-		div.addEventListener('click', processSelected);
-		div.addEventListener('keydown', keyboardListener);
 		var text = document.createTextNode(titles[i]);
 		div.appendChild(text);
-		document.getElementById("suggestions").appendChild(div);
+		suggestions.appendChild(div);
 	}
 }
 
 function clearSuggestionListeners(){
-	var suggested = document.getElementsByClassName("suggestion");
-	for (var i=0; i<suggested.length; i++){
-		suggested[i].removeEventListener('click', processSelected);
-		suggested[i].removeEventListener('keydown', keyboardListener);
-	}
+	var suggestions = document.getElementById("suggestions");
+	suggestions.removeEventListener('click', processSelected, true);
+	suggestions.removeEventListener('keydown', keyboardListener, true);
 }
 
 function highlight(event){
@@ -44,7 +43,6 @@ function highlight(event){
 }
 
 function clearPostDetails(event){
-	event.stopPropagation();
 	if (document.getElementById(SEARCH_FIELD).value.length == 0){
 		document.querySelector("#user_Id").innerText = "";
 		document.querySelector("#post_Id").innerText = "";
@@ -95,11 +93,12 @@ function handleKeyUpPress(){
 }
 
 function processSelected(event){
+	var search = document.getElementById(SEARCH_FIELD);
 	if (highlightedTitle == "") {
-		document.getElementById(SEARCH_FIELD).value = event.target.innerText;
+		search.value = event.target.innerText;
 		showPostDetails(event.target.innerText);
 	} else {
-		document.getElementById(SEARCH_FIELD).value = highlightedTitle;
+		search.value = highlightedTitle;
 		showPostDetails(highlightedTitle);
 	}
 	document.getElementById("suggestions").innerText = '';
@@ -135,9 +134,10 @@ function findMatchingPostsByTitle(title) {
 }
 
 window.onload = function(){
-	document.getElementById(SEARCH_FIELD).addEventListener("input", showSuggestions);
-	document.getElementById(SEARCH_FIELD).addEventListener("keyup", clearPostDetails);
-	document.getElementById(SEARCH_FIELD).autofocus = true;
+	var search = document.getElementById(SEARCH_FIELD);
+	search.addEventListener("input", showSuggestions);
+	search.addEventListener("keyup", clearPostDetails);
+	search.autofocus = true;
 	getPosts();
 }
 
@@ -150,4 +150,3 @@ function getPosts(){
 			})
 	);
 }
-
