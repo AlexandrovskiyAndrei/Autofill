@@ -1,10 +1,7 @@
-body {
+.search {
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-size: 14px;
 	line-height: 1.42857143;
-}
-
-#search {
 	margin-left: 50px; 
 	margin-top: 30px;
 	float: left;
@@ -12,6 +9,9 @@ body {
 }
 
 .suggestion {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	line-height: 1.42857143;
 	border: 1px solid #d7d7af;
 	border-top: none;
 	min-height: 10px;
@@ -28,7 +28,7 @@ body {
 	background-color: #dbdfe6;
 }
 
-input {
+.search-text {
 	width: 515px;
 	height: 34px;
 	padding: 6px 12px;
@@ -49,7 +49,7 @@ input {
 	transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
 }
 
-input:focus {
+.search-text:focus {
 	border-color: #66afe9;
 	outline: 0;
 	margin-bottom: 3px;
@@ -57,31 +57,36 @@ input:focus {
 	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
 }
 
-table {
-	border: 0px solid gray;
-}
-
-td {
+.td-left  {
 	display: table-cell;
 	border: 0px solid gray;
-	min-width: 150px;
+	min-width: 80px;
 	padding: 3px;
 	border-radius: 2px;
 	box-shadow:  0 1px 1px rgba(0, 0, 0, 0.3);
 	background-color: #f9f9f9;
 }
 
-#details {
+.td-right {
+	display: table-cell;
+	border: 0px solid gray;
+	min-width: 220px;
+	padding: 3px;
+	border-radius: 2px;
+	box-shadow:  0 1px 1px rgba(0, 0, 0, 0.3);
+	background-color: #f9f9f9;
+}
+
+.details {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	line-height: 1.42857143;
 	margin-right: 30px; 
 	border: 0px dotted blue;
 	float: left;
 	width: 500px;
 	margin-top: 30px;
 	padding-left: 20px;
-}
-
-#info {
-	margin-left: 50px;
 }
 
 .active {
