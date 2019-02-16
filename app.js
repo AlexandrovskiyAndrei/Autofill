@@ -7,9 +7,9 @@ var totalSuggestions = 0;
 
 function showSuggestions() {
 	var search = document.getElementById(SEARCH_FIELD);
+	var userInput = search.value;
 	document.getElementById("suggestions").innerText = '';
 	clearSuggestionListeners();
-	var userInput = search.value;
 	if (userInput != "") {
 		configureSuggestions(userInput);
 	}
@@ -22,7 +22,7 @@ function configureSuggestions(input){
 	totalSuggestions = titles.length;
 	suggestions.addEventListener('click', processSelected, true);
 	suggestions.addEventListener('keydown', keyboardListener, true);
-	for (var i=0; i<totalSuggestions; i++){
+	for (var i = 0; i < totalSuggestions; i++){
 		var div = document.createElement('DIV');
 		div.id = i;
 		div.classList.add("suggestion");
