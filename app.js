@@ -23,7 +23,6 @@ function configureSuggestions(input){
 	suggestions.addEventListener('click', processSelected, true);
 	suggestions.addEventListener('keydown', keyboardListener, true);
 	for (var i = 0; i < totalSuggestions; i++){
-
 		var div = document.createElement('DIV');
 		div.id = i;
 		div.classList.add("suggestion");
